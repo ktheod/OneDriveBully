@@ -16,3 +16,5 @@ Saved the best for last, OneDrive is Free!
 Bully your OneDrive!
 
 Track OneDrive Bully news and updates also on Facebook: https://www.facebook.com/pg/OneDriveBully
+
+Released Application can be downloaded from here: https://goo.gl/BMIWEg
