@@ -17,4 +17,4 @@ Bully your OneDrive!
 
 Track OneDrive Bully news and updates also on Facebook: https://www.facebook.com/pg/OneDriveBully
 
-Released Application can be downloaded from here: https://goo.gl/BMIWEg
+Released Application can be downloaded from here: https://github.com/ktheod/OneDriveBully/releases
