@@ -35,7 +35,7 @@ namespace OneDriveBully
 
         #region User Settings
 
-        public void checkUserSettings()
+        public bool checkUserSettings() //Version 1.1 - Bug Fix -+
         {
             //Check if user has updated the User Settings
             if (!Properties.Settings.Default.UserDefinedSettings)
@@ -51,6 +51,7 @@ namespace OneDriveBully
             if (!UserDefinedSettingsExist)
             {
                 WrongSettings();
+                return false; //Version 1.1 - Bug Fix -+
             }
             else
             {
@@ -61,6 +62,7 @@ namespace OneDriveBully
                     if (!Directory.Exists(rootPath))
                     {
                         WrongSettings();
+                        return false; //Version 1.1 - Bug Fix -+
                     }
                 }
 
@@ -68,8 +70,10 @@ namespace OneDriveBully
                 if(Properties.Settings.Default.TimerInterval <1)
                 {
                     WrongSettings();
+                    return false; //Version 1.1 - Bug Fix -+
                 }
             }
+            return true; //Version 1.1 - Bug Fix -+
         }
 
         public void WrongSettings()
@@ -164,22 +168,27 @@ namespace OneDriveBully
         public void bullyNow()
         {
             UpdateIconText(1);
-            checkUserSettings();
-
-            if (File.Exists(rootPath + fileName))
+            //Version 1.1 - Bug Fix -
+            //checkUserSettings();
+            if (checkUserSettings())
             {
-                File.Delete(rootPath + fileName);
-            }
+            //Version 1.1 - Bug Fix +
 
-            File.Create(rootPath + fileName).Close();
-            Thread.Sleep(5000);
-            if (File.Exists(rootPath + fileName))
-            {
-                File.Delete(rootPath + fileName);
-            }
-                                 
-            Thread.Sleep(5000);
-            setTimerInterval(Properties.Settings.Default.TimerInterval);
+                if (File.Exists(rootPath + fileName))
+                {
+                    File.Delete(rootPath + fileName);
+                }
+
+                File.Create(rootPath + fileName).Close();
+                Thread.Sleep(5000);
+                if (File.Exists(rootPath + fileName))
+                {
+                    File.Delete(rootPath + fileName);
+                }
+
+                Thread.Sleep(5000);
+                setTimerInterval(Properties.Settings.Default.TimerInterval);
+            } //Version 1.1 - Bug Fix -+
         }
 
         #endregion Bully Function

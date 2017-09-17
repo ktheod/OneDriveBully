@@ -1,0 +1,4 @@
+﻿14/03/17 - Version 1.0 - First Release
+17/09/17 - Version 1.1 - Bug Fix - Issue with OneDrive root folder if not set
+                       - Modified Function checkUserSettings() to return boolean value instead of void
+					   - Amended Function BullyNow() to handle checkUserSettings() return value
