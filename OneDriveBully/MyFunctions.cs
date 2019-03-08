@@ -20,7 +20,6 @@ namespace OneDriveBully
 
         //Timer Variables
         private System.Timers.Timer MyTimer;
-        private Int32 interval;
         private Int32 timeRemaining;
 
         public void initApp()
@@ -28,7 +27,7 @@ namespace OneDriveBully
             initTimer();
             checkUserSettings();
             if (UserDefinedSettingsExist)
-            {                
+            {
                 setTimerInterval(Properties.Settings.Default.TimerInterval);
             }
         }
@@ -101,8 +100,8 @@ namespace OneDriveBully
             }
             else
             {
-                interval = newInterval * 60 * 1000;
-                MyTimer.Interval = interval;
+                timeRemaining = newInterval * 60 * 1000;
+                MyTimer.Interval = 1 * 60 * 1000; //Check timer every 1 minute
 
                 stopTimer();
                 startTimer();
@@ -114,7 +113,6 @@ namespace OneDriveBully
             MyTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
             MyTimer.Enabled = true;
 
-            timeRemaining = interval;
             UpdateIconText(0);
         }
 
@@ -130,7 +128,6 @@ namespace OneDriveBully
             if (timeRemaining <= 0)
             {
                 bullyNow();
-                timeRemaining = interval;
             }
             UpdateIconText(0);
         }
