@@ -47,7 +47,7 @@ namespace OneDriveBully
 
         private const int targetIsADirectory = 1;
 
-        [DllImport("kernel32.dll", SetLastError = true)]
+        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
         private static extern SafeFileHandle CreateFile(
             string lpFileName,
             uint dwDesiredAccess,
@@ -57,7 +57,7 @@ namespace OneDriveBully
             uint dwFlagsAndAttributes,
             IntPtr hTemplateFile);
 
-        [DllImport("kernel32.dll", SetLastError = true)]
+        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
         static extern bool CreateSymbolicLink(string lpSymlinkFileName, string lpTargetFileName, int dwFlags);
 
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
