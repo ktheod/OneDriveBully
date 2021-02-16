@@ -11,6 +11,7 @@ using System.Threading;
 
 namespace OneDriveBully
 {
+    //Version 1.3 - Bug Fix - Changed temp file handling from create/delete to create/rename to keep clean OneDrive log and Recycle Bin
     public class MyFunctions
     {
         //User Settings Variables
