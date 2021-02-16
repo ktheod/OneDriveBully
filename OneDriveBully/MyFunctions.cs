@@ -16,7 +16,10 @@ namespace OneDriveBully
         //User Settings Variables
         public bool UserDefinedSettingsExist;
         private string rootPath;
-        private string fileName = @"\OneDriveBully_SyncTempFile.txt";
+        //Version 1.3 - Bug Fix -
+        //private string fileName = @"\OneDriveBully_SyncTempFile.txt";
+        private string fileName = "OneDriveBully_SyncTempFile";
+        //Version 1.3 - Bug Fix +
 
         //Timer Variables
         private System.Timers.Timer MyTimer;
@@ -169,19 +172,40 @@ namespace OneDriveBully
             //checkUserSettings();
             if (checkUserSettings())
             {
-            //Version 1.1 - Bug Fix +
+                //Version 1.1 - Bug Fix +
 
-                if (File.Exists(rootPath + fileName))
-                {
-                    File.Delete(rootPath + fileName);
-                }
+                //Version 1.3 - Bug Fix -
+                //if (File.Exists(rootPath + fileName))
+                //{
+                //    File.Delete(rootPath + fileName);
+                //}
 
-                File.Create(rootPath + fileName).Close();
-                Thread.Sleep(5000);
-                if (File.Exists(rootPath + fileName))
+                //File.Create(rootPath + fileName).Close();
+                //Thread.Sleep(5000);
+                //if (File.Exists(rootPath + fileName))
+                //{
+                //    File.Delete(rootPath + fileName);
+                //}
+
+                //Get all files that start with 'OneDriveBully_SyncTempFile'
+                string[] oldFiles = Directory.GetFiles(@rootPath, fileName + "*.txt");
+                if ((oldFiles.Length > 1) || (oldFiles.Length == 0))
                 {
-                    File.Delete(rootPath + fileName);
+                    //Remove old files - in case there are leftovers from previous syncs
+                    foreach (string oldFile in oldFiles)
+                    {
+                        File.Delete(oldFile);
+                    }
+
+                    //Create new file
+                    File.Create(rootPath + fileName + DateTime.Now.ToString("-yyyyMMdd-hhmmss") + ".txt").Close();
                 }
+                else
+                {
+                    //Only 1 file exists (normal case), rename it with latest datetime
+                    File.Move(oldFiles[0], rootPath + fileName + DateTime.Now.ToString("-yyyyMMdd-hhmmss") + ".txt");
+                }
+                //Version 1.3 - Bug Fix +
 
                 Thread.Sleep(5000);
                 setTimerInterval(Properties.Settings.Default.TimerInterval);
