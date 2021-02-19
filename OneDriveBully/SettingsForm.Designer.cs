@@ -52,6 +52,8 @@
             // 
             // txt_OneDriveFolder
             // 
+            this.txt_OneDriveFolder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txt_OneDriveFolder.Location = new System.Drawing.Point(144, 8);
             this.txt_OneDriveFolder.Margin = new System.Windows.Forms.Padding(2);
             this.txt_OneDriveFolder.Name = "txt_OneDriveFolder";
@@ -80,6 +82,7 @@
             // 
             // b_SaveSettings
             // 
+            this.b_SaveSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.b_SaveSettings.Location = new System.Drawing.Point(728, 31);
             this.b_SaveSettings.Margin = new System.Windows.Forms.Padding(2);
             this.b_SaveSettings.Name = "b_SaveSettings";
@@ -137,6 +140,7 @@
             // 
             // b_browser
             // 
+            this.b_browser.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.b_browser.Location = new System.Drawing.Point(728, 7);
             this.b_browser.Margin = new System.Windows.Forms.Padding(2);
             this.b_browser.Name = "b_browser";
@@ -148,6 +152,7 @@
             // 
             // b_addSymLink
             // 
+            this.b_addSymLink.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.b_addSymLink.Location = new System.Drawing.Point(607, 123);
             this.b_addSymLink.Margin = new System.Windows.Forms.Padding(2);
             this.b_addSymLink.Name = "b_addSymLink";
@@ -159,6 +164,7 @@
             // 
             // b_DeleteSymLink
             // 
+            this.b_DeleteSymLink.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.b_DeleteSymLink.Location = new System.Drawing.Point(668, 123);
             this.b_DeleteSymLink.Margin = new System.Windows.Forms.Padding(2);
             this.b_DeleteSymLink.Name = "b_DeleteSymLink";
@@ -170,6 +176,7 @@
             // 
             // b_refreshSymLinks
             // 
+            this.b_refreshSymLinks.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.b_refreshSymLinks.Location = new System.Drawing.Point(729, 123);
             this.b_refreshSymLinks.Margin = new System.Windows.Forms.Padding(2);
             this.b_refreshSymLinks.Name = "b_refreshSymLinks";
@@ -183,6 +190,9 @@
             // 
             this.dgv_SymLinks.AllowUserToAddRows = false;
             this.dgv_SymLinks.AllowUserToDeleteRows = false;
+            this.dgv_SymLinks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.dgv_SymLinks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgv_SymLinks.Location = new System.Drawing.Point(13, 148);
             this.dgv_SymLinks.Margin = new System.Windows.Forms.Padding(2);
@@ -257,7 +267,6 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2);
-            this.MaximizeBox = false;
             this.Name = "SettingsForm";
             this.Text = "OneDrive Bully - Settings";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);

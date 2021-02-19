@@ -22,6 +22,12 @@ namespace OneDriveBully
             {
                 LoadSettings();
             }
+            //Version 1.3 -
+            else
+            {
+                cb_ShowInstructions.Checked = true;
+            }
+            //Version 1.3 +
         }
 
         #region Settings Handling
@@ -35,6 +41,7 @@ namespace OneDriveBully
             cb_LoadOnWindowsStartup.Checked = Properties.Settings.Default.LoadOnWindowsStartup;
             //Version 1.3 -
             cb_ShowInstructions.Checked = Properties.Settings.Default.ShowInstructions;
+
             //Version 1.3 +
             isDirty = false;
 
@@ -180,6 +187,8 @@ namespace OneDriveBully
             {
                 if (fbd_SymLinks.SelectedPath != null || fbd_SymLinks.SelectedPath != "")
                 {
+                    //Version 1.3 -
+                    /*
                     string fAdd = fbd_SymLinks.SelectedPath + @"\";
                     string fAddName = System.IO.Path.GetDirectoryName(fAdd);
                     System.IO.DirectoryInfo info = new System.IO.DirectoryInfo(fAddName);
@@ -187,13 +196,61 @@ namespace OneDriveBully
 
                     if (fAdd != "" && fAddName != "")
                     {
-                        if (ProcessIcon.fn.createSymbolicLink(@Properties.Settings.Default.OneDriveRootFolder + @"\" + @fAddName, @fAdd))
+                        //if (ProcessIcon.fn.createSymbolicLink(@Properties.Settings.Default.OneDriveRootFolder + @"\" + @fAddName, @fAdd))
+                        //{
+                        //    Refresh_dgv();
+                        //}
+                    }
+                    */
+
+                    string fAdd = fbd_SymLinks.SelectedPath + @"\";
+                    string fAddName;
+                    System.IO.DirectoryInfo info = new System.IO.DirectoryInfo(fAdd);
+                    fAddName = info.Name;
+                    //Avoid accidently linking C:\, D:\ etc.
+                    if (info.Parent == null)
+                    {
+                        MessageBox.Show("You cannot select root folders like C:\\ drive etc. for this operation", "Wrong selection", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else
+                    {
+                        if (fAdd != "" && info.Parent != null) //avoid accidently linking C:\, D:\ etc.
                         {
-                            Refresh_dgv();
+                            DialogResult dialogResult = MessageBox.Show(
+                            "Do you want to copy the folder structure?" + Environment.NewLine + Environment.NewLine +
+                            "- If you select Yes, the folder structure will be copied to OneDrive." + Environment.NewLine + "(Select this if you have the same folder structure in all your PCs!)" + Environment.NewLine + Environment.NewLine +
+                            "- If you select No, the folder will be created in OneDrive root folder." + Environment.NewLine + "(Select this if you have different folder structure per PC!)" + Environment.NewLine + Environment.NewLine +
+                            "- Click Cancel if you are not sure and want to rethink it"
+                            , "Select type of link to create", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+
+                            switch (dialogResult)
+                            {
+                                case DialogResult.Yes:
+                                    info = new System.IO.DirectoryInfo(fAdd);
+                                    string OneDriveFolder =  fAdd.Replace(@info.Root.ToString(), @Properties.Settings.Default.OneDriveRootFolder + @"\");
+                                    string OneDriveFolderStructure = OneDriveFolder.Remove(OneDriveFolder.LastIndexOf(info.Name));
+                                    if (!System.IO.Directory.Exists(OneDriveFolderStructure))
+                                    {
+                                        System.IO.Directory.CreateDirectory(OneDriveFolderStructure);
+                                    }
+                                    ProcessIcon.fn.createSymbolicLink(@OneDriveFolder, @fAdd);
+                                    break;
+                                case DialogResult.No:
+                                    ProcessIcon.fn.createSymbolicLink(@Properties.Settings.Default.OneDriveRootFolder + @"\" + @fAddName, @fAdd);
+                                    break;
+                                case DialogResult.Cancel:
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
                     }
+                    //Version 1.3 +
                 }
-            }       
+            }
+            //Version 1.3 -
+            Refresh_dgv();
+            //Version 1.3 +
         }
 
         private void B_DeleteSymLink_Click(object sender, EventArgs e)
@@ -204,15 +261,25 @@ namespace OneDriveBully
             //Version 1.3 + 
             {
                 string fDel = SymLinksTable.Rows[dgv_SymLinks.SelectedRows[0].Index].ItemArray[1].ToString();
-                if (MessageBox.Show("Do you want to delete this Symbolic Link?", "Delete confirmation",
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                if (MessageBox.Show(
+                    "Do you want to delete this Symbolic Link?" + Environment.NewLine + Environment.NewLine + 
+                    "Warning: This will remove all files in the folder from OneDrive!" + Environment.NewLine + Environment.NewLine +
+                    "To avoid file deletion, please stop syncing this folder first by changing OneDrive settings."
+                    , "Delete confirmation",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                 {
-                    if (ProcessIcon.fn.deleteSymbolicLink(@fDel))
-                    {
-                        Refresh_dgv();
-                    }
+                    //Version 1.3 -
+                    //if (ProcessIcon.fn.deleteSymbolicLink(@fDel))
+                    //{
+                    //    Refresh_dgv();
+                    //}
+                    ProcessIcon.fn.deleteSymbolicLink(@fDel);
+                    //Version 1.3 +
                 }
             }
+            //Version 1.3 -
+            Refresh_dgv();
+            //Version 1.3 +
         }
 
         private void B_refreshSymLinks_Click(object sender, EventArgs e)
@@ -224,14 +291,16 @@ namespace OneDriveBully
         {
             SymLinksTable = new DataTable();
             SymLinksTable = ProcessIcon.fn.getOneDriveForSymLinks();
-            if (SymLinksTable.Rows.Count > 0)
-            {
-                dgv_SymLinks.DataSource = SymLinksTable;
-                dgv_SymLinks.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                dgv_SymLinks.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                dgv_SymLinks.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                dgv_SymLinks.Refresh();
-            }
+            //Version 1.3 -
+            //if (SymLinksTable.Rows.Count > 0)
+            //{
+            //Version 1.3 +
+            dgv_SymLinks.DataSource = SymLinksTable;
+            dgv_SymLinks.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dgv_SymLinks.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dgv_SymLinks.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dgv_SymLinks.Refresh();
+            //} //Version 1.3 -+
         }
 
         #endregion Symbolic Link Form Controls & Functions

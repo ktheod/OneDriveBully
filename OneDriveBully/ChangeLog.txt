@@ -15,9 +15,12 @@
 						4) Fixed issue with folder paths containing non english characters
 						5) Fixed all function names to follow .net naming standard (1st letter capitalized)
 						6) Fixed issue on Settings form when there are no symbolic links and Delete button is pressed.
+						7) Changed Settings form to allow maximize. Helpful for long symbolic links
+						8) Added recursive search and junction support
 
-						Special thanks to:
+						Special thanks to the following people who contributed in this release:
 						- quangkieu for reporting issue 1 and José Santos Ribeiro for sending a code fix
 						- meysconce and jonathanrswift for reporting issue 2 and 3
 						- mitsakosgr for reporting and sending a code fix for issue 4
 						- Houiin for reporting issue 6
+						- micahmo for issue 8. Awesome code suggestion, appreciate your time
