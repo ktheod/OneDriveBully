@@ -314,7 +314,7 @@ namespace OneDriveBully
             SymLinksTable.Columns.Add("Folder Name", typeof(string));
 
             Properties.Settings.Default.Reload();
-            string[] subDirs = Directory.GetDirectories(Properties.Settings.Default.OneDriveRootFolder);
+            string[] subDirs = Directory.GetDirectories(Properties.Settings.Default.OneDriveRootFolder, "*", SearchOption.AllDirectories);
 
             SymbolicLink sl = new SymbolicLink();
 

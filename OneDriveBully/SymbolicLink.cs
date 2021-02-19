@@ -6,11 +6,24 @@ using System.Text;
 
 namespace OneDriveBully
 {
+    public interface IReparseData
+    {
+        uint GetReparseTag { get; }
+
+        ushort GetPrintNameOffset { get; }
+
+        byte[] GetPathBuffer { get; }
+
+        ushort GetPrintNameLength { get; }
+
+        uint ExpectedReparseTag { get; }
+    }
+
     // For More Details about this Class, please visit http://troyparsons.com/blog/2012/03/symbolic-links-in-c-sharp/
     //Version 1.3 - Changed [DllImport("kernel32.dll", SetLastError = true)] to [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SymbolicLinkReparseData
+    public struct SymbolicLinkReparseData : IReparseData
     {
         // Not certain about this!
         private const int maxUnicodePathLength = 260 * 2;
@@ -25,8 +38,36 @@ namespace OneDriveBully
         public uint Flags;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = maxUnicodePathLength)]
         public byte[] PathBuffer;
+
+        public uint GetReparseTag => ReparseTag;
+        public ushort GetPrintNameOffset => PrintNameOffset;
+        public byte[] GetPathBuffer => PathBuffer;
+        public ushort GetPrintNameLength => PrintNameLength;
+        public uint ExpectedReparseTag => 0xA000000C;
     }
 
+    [StructLayout(LayoutKind.Sequential)]
+    public struct MountPointReparseData : IReparseData
+    {
+        // Not certain about this!
+        private const int maxUnicodePathLength = 260 * 2;
+
+        public uint ReparseTag;
+        public ushort ReparseDataLength;
+        public ushort Reserved;
+        public ushort SubstituteNameOffset;
+        public ushort SubstituteNameLength;
+        public ushort PrintNameOffset;
+        public ushort PrintNameLength;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = maxUnicodePathLength)]
+        public byte[] PathBuffer;
+
+        public uint GetReparseTag => ReparseTag;
+        public ushort GetPrintNameOffset => PrintNameOffset;
+        public byte[] GetPathBuffer => PathBuffer;
+        public ushort GetPrintNameLength => PrintNameLength;
+        public uint ExpectedReparseTag => 0xA0000003;
+    }
 
     public class SymbolicLink
     {
@@ -41,8 +82,6 @@ namespace OneDriveBully
         private const uint pathNotAReparsePointError = 0x80071126;
 
         private const uint shareModeAll = 0x7; // Read, Write, Delete
-
-        private const uint symLinkTag = 0xA000000C;
 
         private const int targetIsAFile = 0;
 
@@ -112,11 +151,27 @@ namespace OneDriveBully
         }
         public string GetSymLinkTarget(string path)
         {
-            return GetTarget(path);
+            string result = GetTarget<SymbolicLinkReparseData>(path);
+
+            // If we couldn't get a symlink, try getting a mount point
+            if (string.IsNullOrEmpty(result))
+            {
+                result = GetTarget<MountPointReparseData>(path);
+            }
+
+            return result;
         }
+
+        // Old version of this method with no generic parameter for compatibility
+        // It assumes that symlink is desired, which is the old functionality.
         public static string GetTarget(string path)
         {
-            SymbolicLinkReparseData reparseDataBuffer;
+            return GetTarget<SymbolicLinkReparseData>(path);
+        }
+
+        public static string GetTarget<TReparseData>(string path) where TReparseData : IReparseData
+        {
+            TReparseData reparseDataBuffer;
 
             using (SafeFileHandle fileHandle = getFileHandle(path))
             {
@@ -146,21 +201,21 @@ namespace OneDriveBully
                         Marshal.ThrowExceptionForHR(Marshal.GetHRForLastWin32Error());
                     }
 
-                    reparseDataBuffer = (SymbolicLinkReparseData)Marshal.PtrToStructure(
-                        outBuffer, typeof(SymbolicLinkReparseData));
+                    reparseDataBuffer = (TReparseData)Marshal.PtrToStructure(
+                        outBuffer, typeof(TReparseData));
                 }
                 finally
                 {
                     Marshal.FreeHGlobal(outBuffer);
                 }
             }
-            if (reparseDataBuffer.ReparseTag != symLinkTag)
+            if (reparseDataBuffer.GetReparseTag != reparseDataBuffer.ExpectedReparseTag)
             {
                 return null;
             }
 
-            string target = Encoding.Unicode.GetString(reparseDataBuffer.PathBuffer,
-                reparseDataBuffer.PrintNameOffset, reparseDataBuffer.PrintNameLength);
+            string target = Encoding.Unicode.GetString(reparseDataBuffer.GetPathBuffer,
+                reparseDataBuffer.GetPrintNameOffset, reparseDataBuffer.GetPrintNameLength);
 
             return target;
         }
