@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("K.Theodoridis")]
 [assembly: AssemblyProduct("OneDrive Bully")]
-[assembly: AssemblyCopyright("Copyright © K.Theodoridis 2017")]
+[assembly: AssemblyCopyright("Copyright © K.Theodoridis 2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
