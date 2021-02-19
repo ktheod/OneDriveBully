@@ -3,7 +3,6 @@ using System.Windows.Forms;
 
 namespace OneDriveBully
 {
-
     static class Program
     {
         /// <summary>
@@ -24,7 +23,7 @@ namespace OneDriveBully
                 pi.Display();
 
                 // Make sure the application runs!
-                Application.Run();
+                Application.Run();               
             }
         }
     }

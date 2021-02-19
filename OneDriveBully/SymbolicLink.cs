@@ -7,6 +7,7 @@ using System.Text;
 namespace OneDriveBully
 {
     // For More Details about this Class, please visit http://troyparsons.com/blog/2012/03/symbolic-links-in-c-sharp/
+    //Version 1.3 - Changed [DllImport("kernel32.dll", SetLastError = true)] to [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
 
     [StructLayout(LayoutKind.Sequential)]
     public struct SymbolicLinkReparseData
@@ -47,7 +48,7 @@ namespace OneDriveBully
 
         private const int targetIsADirectory = 1;
 
-        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)] //Version 1.3 -+
         private static extern SafeFileHandle CreateFile(
             string lpFileName,
             uint dwDesiredAccess,
@@ -57,10 +58,10 @@ namespace OneDriveBully
             uint dwFlagsAndAttributes,
             IntPtr hTemplateFile);
 
-        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)] //Version 1.3 -+
         static extern bool CreateSymbolicLink(string lpSymlinkFileName, string lpTargetFileName, int dwFlags);
 
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)] //Version 1.3 -+
         private static extern bool DeviceIoControl(
             IntPtr hDevice,
             uint dwIoControlCode,

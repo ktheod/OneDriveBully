@@ -5,6 +5,8 @@ using System.IO;
 
 namespace OneDriveBully
 {
+    //Version 1.3 - Added Show Instructions
+    //            - Bug Fix on Deleting Symbolic Links when the Grid is empty
     public partial class SettingsForm : Form
     {
         bool startWithWindowsChanged = false;
@@ -18,28 +20,31 @@ namespace OneDriveBully
             // Load user settings           
             if (ProcessIcon.fn.UserDefinedSettingsExist)
             {
-                loadSettings();
+                LoadSettings();
             }
         }
 
         #region Settings Handling
 
-        private void loadSettings()
+        private void LoadSettings()
         {
             // Load user settings and update form controls
             Properties.Settings.Default.Reload();
             txt_OneDriveFolder.Text = Properties.Settings.Default.OneDriveRootFolder;
             txt_Interval.Text = Properties.Settings.Default.TimerInterval.ToString();
             cb_LoadOnWindowsStartup.Checked = Properties.Settings.Default.LoadOnWindowsStartup;
+            //Version 1.3 -
+            cb_ShowInstructions.Checked = Properties.Settings.Default.ShowInstructions;
+            //Version 1.3 +
             isDirty = false;
 
             if (Properties.Settings.Default.UserDefinedSettings)
             {
-                refresh_dgv();
+                Refresh_dgv();
             }
         }
 
-        private bool validateSettings()
+        private bool ValidateSettings()
         {
             // Check OneDrive Root Folder exists
             if (txt_OneDriveFolder.Text == "")
@@ -60,8 +65,7 @@ namespace OneDriveBully
                 return false;
             }
 
-            int intervalInt = 0;
-            if (int.TryParse(txt_Interval.Text, out intervalInt))
+            if (int.TryParse(txt_Interval.Text, out int intervalInt))
             {
                 if (intervalInt <= 0)
                 {
@@ -78,12 +82,15 @@ namespace OneDriveBully
             return true;
         }
 
-        private void saveSettings()
+        private void SaveSettings()
         {           
             // Save user settings
             Properties.Settings.Default.OneDriveRootFolder = txt_OneDriveFolder.Text;
             Properties.Settings.Default.TimerInterval = Convert.ToInt32(txt_Interval.Text);
             Properties.Settings.Default.LoadOnWindowsStartup = cb_LoadOnWindowsStartup.Checked;
+            //Version 1.3 -
+            Properties.Settings.Default.ShowInstructions = cb_ShowInstructions.Checked;
+            //Version 1.3 +
             Properties.Settings.Default.UserDefinedSettings = true;
             Properties.Settings.Default.Save();
             isDirty = false;
@@ -117,16 +124,16 @@ namespace OneDriveBully
             }
         }
 
-        private void b_SaveSettings_Click(object sender, EventArgs e)
+        private void B_SaveSettings_Click(object sender, EventArgs e)
         {
-            if (validateSettings())
+            if (ValidateSettings())
             {
-                saveSettings();
-                loadSettings();
+                SaveSettings();
+                LoadSettings();
             }
         }
 
-        private void b_browser_Click(object sender, EventArgs e)
+        private void B_browser_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog fbd_OneDrivePath = new FolderBrowserDialog();
             if (fbd_OneDrivePath.ShowDialog() != System.Windows.Forms.DialogResult.Cancel)
@@ -139,7 +146,7 @@ namespace OneDriveBully
             isDirty = true;
         }
 
-        private void txt_Interval_TextChanged(object sender, EventArgs e)
+        private void Txt_Interval_TextChanged(object sender, EventArgs e)
         {
             if (System.Text.RegularExpressions.Regex.IsMatch(txt_Interval.Text, "[^0-9]"))
             {
@@ -149,17 +156,24 @@ namespace OneDriveBully
             isDirty = true;
         }
 
-        private void cb_LoadOnWindowsStartup_CheckedChanged(object sender, EventArgs e)
+        private void Cb_LoadOnWindowsStartup_CheckedChanged(object sender, EventArgs e)
         {
             startWithWindowsChanged = true;
             isDirty = true;
         }
 
+        //Version 1.3 -
+        private void Cb_ShowInstructions_CheckedChanged(object sender, EventArgs e)
+        {  
+            isDirty = true;
+        }
+        //Version 1.3 +
+
         #endregion Form Controls
 
         #region Symbolic Link Form Controls & Functions
 
-        private void b_addSymLink_Click(object sender, EventArgs e)
+        private void B_addSymLink_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog fbd_SymLinks = new FolderBrowserDialog();
             if (fbd_SymLinks.ShowDialog() != System.Windows.Forms.DialogResult.Cancel)
@@ -175,36 +189,38 @@ namespace OneDriveBully
                     {
                         if (ProcessIcon.fn.createSymbolicLink(@Properties.Settings.Default.OneDriveRootFolder + @"\" + @fAddName, @fAdd))
                         {
-                            refresh_dgv();
+                            Refresh_dgv();
                         }
                     }
                 }
             }       
         }
 
-        private void b_DeleteSymLink_Click(object sender, EventArgs e)
+        private void B_DeleteSymLink_Click(object sender, EventArgs e)
         {
-            if (dgv_SymLinks.SelectedRows != null)
+            //Version 1.3 -
+            //if (dgv_SymLinks.SelectedRows != null)
+            if ((dgv_SymLinks.SelectedRows != null) && (dgv_SymLinks.RowCount > 0))
+            //Version 1.3 + 
             {
                 string fDel = SymLinksTable.Rows[dgv_SymLinks.SelectedRows[0].Index].ItemArray[1].ToString();
-                string fDelName = SymLinksTable.Rows[dgv_SymLinks.SelectedRows[0].Index].ItemArray[2].ToString();
                 if (MessageBox.Show("Do you want to delete this Symbolic Link?", "Delete confirmation",
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     if (ProcessIcon.fn.deleteSymbolicLink(@fDel))
                     {
-                        refresh_dgv();
+                        Refresh_dgv();
                     }
                 }
             }
         }
 
-        private void b_refreshSymLinks_Click(object sender, EventArgs e)
+        private void B_refreshSymLinks_Click(object sender, EventArgs e)
         {
-            refresh_dgv();
+            Refresh_dgv();
         }
 
-        private void refresh_dgv()
+        private void Refresh_dgv()
         {
             SymLinksTable = new DataTable();
             SymLinksTable = ProcessIcon.fn.getOneDriveForSymLinks();

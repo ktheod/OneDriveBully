@@ -2,3 +2,22 @@
 17/09/17 - Version 1.1 - Bug Fix - Issue with OneDrive root folder if not set
                        - Modified Function checkUserSettings() to return boolean value instead of void
 					   - Amended Function BullyNow() to handle checkUserSettings() return value
+08/03/19 - Version 1.2 - Bug Fixes for Timer
+21/01/20 - Version 1.3 - Bug Fixes and better overall handling
+						1) Changed temp file handling from create/delete to create/rename
+							- This change will
+								- Reduce the OneDrive log from 2 entries (Create/Delete) to only 1 (Rename)
+								- Keep OneDrive Recycle Bin clean
+						2) Added instructions MessageBox on first load/first close of the app
+							- This should make it clear to all users that the app is minimized on system tray and the possible actions you have available
+						3) Added new setting to show Instructions on next Exit
+							- In case the user wants a reminder
+						4) Fixed issue with folder paths containing non english characters
+						5) Fixed all function names to follow .net naming standard (1st letter capitalized)
+						6) Fixed issue on Settings form when there are no symbolic links and Delete button is pressed.
+
+						Special thanks to:
+						- quangkieu for reporting issue 1 and José Santos Ribeiro for sending a code fix
+						- meysconce and jonathanrswift for reporting issue 2 and 3
+						- mitsakosgr for reporting and sending a code fix for issue 4
+						- Houiin for reporting issue 6

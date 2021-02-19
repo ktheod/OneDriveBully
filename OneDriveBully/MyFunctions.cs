@@ -11,16 +11,19 @@ using System.Threading;
 
 namespace OneDriveBully
 {
-    //Version 1.3 - Bug Fix - Changed temp file handling from create/delete to create/rename to keep clean OneDrive log and Recycle Bin
+    //Version 1.3 - Changed temp file handling from create/delete to create/rename to keep clean OneDrive log and Recycle Bin
+    //            - Changed  [DllImport("Kernel32.dll", CharSet = CharSet.Unicode)] to [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+    //
+
     public class MyFunctions
     {
         //User Settings Variables
         public bool UserDefinedSettingsExist;
         private string rootPath;
-        //Version 1.3 - Bug Fix -
+        //Version 1.3 -
         //private string fileName = @"\OneDriveBully_SyncTempFile.txt";
         private string fileName = "OneDriveBully_SyncTempFile";
-        //Version 1.3 - Bug Fix +
+        //Version 1.3 +
 
         //Timer Variables
         private System.Timers.Timer MyTimer;
@@ -175,7 +178,7 @@ namespace OneDriveBully
             {
                 //Version 1.1 - Bug Fix +
 
-                //Version 1.3 - Bug Fix -
+                //Version 1.3 -
                 //if (File.Exists(rootPath + fileName))
                 //{
                 //    File.Delete(rootPath + fileName);
@@ -206,7 +209,7 @@ namespace OneDriveBully
                     //Only 1 file exists (normal case), rename it with latest datetime
                     File.Move(oldFiles[0], rootPath + fileName + DateTime.Now.ToString("-yyyyMMdd-hhmmss") + ".txt");
                 }
-                //Version 1.3 - Bug Fix +
+                //Version 1.3 +
 
                 Thread.Sleep(5000);
                 setTimerInterval(Properties.Settings.Default.TimerInterval);
@@ -240,7 +243,10 @@ namespace OneDriveBully
 
         #region Symbolic Links Related Functions
 
-        [DllImport("Kernel32.dll", CharSet = CharSet.Unicode)]
+        //Version 1.3 -
+        //[DllImport("Kernel32.dll", CharSet = CharSet.Unicode)]
+        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        //Version 1.3 +
         static extern bool CreateSymbolicLink(
             string lpSymlinkFileName,
             string lpTargetFileName,

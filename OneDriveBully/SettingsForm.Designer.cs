@@ -45,6 +45,8 @@
             this.dgv_SymLinks = new System.Windows.Forms.DataGridView();
             this.fbd_SymLinks = new System.Windows.Forms.FolderBrowserDialog();
             this.lbl_SymbolicLinks = new System.Windows.Forms.Label();
+            this.cb_ShowInstructions = new System.Windows.Forms.CheckBox();
+            this.lblShowInstructions = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_SymLinks)).BeginInit();
             this.SuspendLayout();
             // 
@@ -85,7 +87,7 @@
             this.b_SaveSettings.TabIndex = 4;
             this.b_SaveSettings.Text = "Save Settings";
             this.b_SaveSettings.UseVisualStyleBackColor = true;
-            this.b_SaveSettings.Click += new System.EventHandler(this.b_SaveSettings_Click);
+            this.b_SaveSettings.Click += new System.EventHandler(this.B_SaveSettings_Click);
             // 
             // lbl_Interval
             // 
@@ -105,12 +107,12 @@
             this.txt_Interval.Size = new System.Drawing.Size(40, 20);
             this.txt_Interval.TabIndex = 2;
             this.txt_Interval.Text = "0";
-            this.txt_Interval.TextChanged += new System.EventHandler(this.txt_Interval_TextChanged);
+            this.txt_Interval.TextChanged += new System.EventHandler(this.Txt_Interval_TextChanged);
             // 
             // lbl_WindowsStartup
             // 
             this.lbl_WindowsStartup.AutoSize = true;
-            this.lbl_WindowsStartup.Location = new System.Drawing.Point(10, 58);
+            this.lbl_WindowsStartup.Location = new System.Drawing.Point(11, 58);
             this.lbl_WindowsStartup.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbl_WindowsStartup.Name = "lbl_WindowsStartup";
             this.lbl_WindowsStartup.Size = new System.Drawing.Size(130, 13);
@@ -120,13 +122,13 @@
             // cb_LoadOnWindowsStartup
             // 
             this.cb_LoadOnWindowsStartup.AutoSize = true;
-            this.cb_LoadOnWindowsStartup.Location = new System.Drawing.Point(144, 57);
+            this.cb_LoadOnWindowsStartup.Location = new System.Drawing.Point(169, 57);
             this.cb_LoadOnWindowsStartup.Margin = new System.Windows.Forms.Padding(2);
             this.cb_LoadOnWindowsStartup.Name = "cb_LoadOnWindowsStartup";
             this.cb_LoadOnWindowsStartup.Size = new System.Drawing.Size(15, 14);
             this.cb_LoadOnWindowsStartup.TabIndex = 3;
             this.cb_LoadOnWindowsStartup.UseVisualStyleBackColor = true;
-            this.cb_LoadOnWindowsStartup.CheckedChanged += new System.EventHandler(this.cb_LoadOnWindowsStartup_CheckedChanged);
+            this.cb_LoadOnWindowsStartup.CheckedChanged += new System.EventHandler(this.Cb_LoadOnWindowsStartup_CheckedChanged);
             // 
             // fbd_OneDrivePath
             // 
@@ -142,47 +144,47 @@
             this.b_browser.TabIndex = 1;
             this.b_browser.Text = "Browse";
             this.b_browser.UseVisualStyleBackColor = true;
-            this.b_browser.Click += new System.EventHandler(this.b_browser_Click);
+            this.b_browser.Click += new System.EventHandler(this.B_browser_Click);
             // 
             // b_addSymLink
             // 
-            this.b_addSymLink.Location = new System.Drawing.Point(606, 95);
+            this.b_addSymLink.Location = new System.Drawing.Point(607, 123);
             this.b_addSymLink.Margin = new System.Windows.Forms.Padding(2);
             this.b_addSymLink.Name = "b_addSymLink";
             this.b_addSymLink.Size = new System.Drawing.Size(56, 21);
             this.b_addSymLink.TabIndex = 5;
             this.b_addSymLink.Text = "Add";
             this.b_addSymLink.UseVisualStyleBackColor = true;
-            this.b_addSymLink.Click += new System.EventHandler(this.b_addSymLink_Click);
+            this.b_addSymLink.Click += new System.EventHandler(this.B_addSymLink_Click);
             // 
             // b_DeleteSymLink
             // 
-            this.b_DeleteSymLink.Location = new System.Drawing.Point(667, 95);
+            this.b_DeleteSymLink.Location = new System.Drawing.Point(668, 123);
             this.b_DeleteSymLink.Margin = new System.Windows.Forms.Padding(2);
             this.b_DeleteSymLink.Name = "b_DeleteSymLink";
             this.b_DeleteSymLink.Size = new System.Drawing.Size(56, 21);
             this.b_DeleteSymLink.TabIndex = 6;
             this.b_DeleteSymLink.Text = "Delete";
             this.b_DeleteSymLink.UseVisualStyleBackColor = true;
-            this.b_DeleteSymLink.Click += new System.EventHandler(this.b_DeleteSymLink_Click);
+            this.b_DeleteSymLink.Click += new System.EventHandler(this.B_DeleteSymLink_Click);
             // 
             // b_refreshSymLinks
             // 
-            this.b_refreshSymLinks.Location = new System.Drawing.Point(728, 95);
+            this.b_refreshSymLinks.Location = new System.Drawing.Point(729, 123);
             this.b_refreshSymLinks.Margin = new System.Windows.Forms.Padding(2);
             this.b_refreshSymLinks.Name = "b_refreshSymLinks";
             this.b_refreshSymLinks.Size = new System.Drawing.Size(56, 21);
             this.b_refreshSymLinks.TabIndex = 7;
             this.b_refreshSymLinks.Text = "Refresh";
             this.b_refreshSymLinks.UseVisualStyleBackColor = true;
-            this.b_refreshSymLinks.Click += new System.EventHandler(this.b_refreshSymLinks_Click);
+            this.b_refreshSymLinks.Click += new System.EventHandler(this.B_refreshSymLinks_Click);
             // 
             // dgv_SymLinks
             // 
             this.dgv_SymLinks.AllowUserToAddRows = false;
             this.dgv_SymLinks.AllowUserToDeleteRows = false;
             this.dgv_SymLinks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgv_SymLinks.Location = new System.Drawing.Point(13, 120);
+            this.dgv_SymLinks.Location = new System.Drawing.Point(13, 148);
             this.dgv_SymLinks.Margin = new System.Windows.Forms.Padding(2);
             this.dgv_SymLinks.MultiSelect = false;
             this.dgv_SymLinks.Name = "dgv_SymLinks";
@@ -190,7 +192,7 @@
             this.dgv_SymLinks.RowTemplate.Height = 24;
             this.dgv_SymLinks.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.dgv_SymLinks.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgv_SymLinks.Size = new System.Drawing.Size(772, 333);
+            this.dgv_SymLinks.Size = new System.Drawing.Size(772, 305);
             this.dgv_SymLinks.TabIndex = 13;
             // 
             // fbd_SymLinks
@@ -202,11 +204,32 @@
             this.lbl_SymbolicLinks.AutoSize = true;
             this.lbl_SymbolicLinks.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_SymbolicLinks.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.lbl_SymbolicLinks.Location = new System.Drawing.Point(9, 94);
+            this.lbl_SymbolicLinks.Location = new System.Drawing.Point(9, 118);
             this.lbl_SymbolicLinks.Name = "lbl_SymbolicLinks";
             this.lbl_SymbolicLinks.Size = new System.Drawing.Size(127, 20);
             this.lbl_SymbolicLinks.TabIndex = 14;
             this.lbl_SymbolicLinks.Text = "Symbolic Links";
+            // 
+            // cb_ShowInstructions
+            // 
+            this.cb_ShowInstructions.AutoSize = true;
+            this.cb_ShowInstructions.Location = new System.Drawing.Point(169, 80);
+            this.cb_ShowInstructions.Margin = new System.Windows.Forms.Padding(2);
+            this.cb_ShowInstructions.Name = "cb_ShowInstructions";
+            this.cb_ShowInstructions.Size = new System.Drawing.Size(15, 14);
+            this.cb_ShowInstructions.TabIndex = 15;
+            this.cb_ShowInstructions.UseVisualStyleBackColor = true;
+            this.cb_ShowInstructions.CheckedChanged += new System.EventHandler(this.Cb_ShowInstructions_CheckedChanged);
+            // 
+            // lblShowInstructions
+            // 
+            this.lblShowInstructions.AutoSize = true;
+            this.lblShowInstructions.Location = new System.Drawing.Point(11, 80);
+            this.lblShowInstructions.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblShowInstructions.Name = "lblShowInstructions";
+            this.lblShowInstructions.Size = new System.Drawing.Size(149, 13);
+            this.lblShowInstructions.TabIndex = 16;
+            this.lblShowInstructions.Text = "Show Instructions on next Exit";
             // 
             // SettingsForm
             // 
@@ -214,6 +237,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(793, 464);
+            this.Controls.Add(this.cb_ShowInstructions);
+            this.Controls.Add(this.lblShowInstructions);
             this.Controls.Add(this.lbl_SymbolicLinks);
             this.Controls.Add(this.dgv_SymLinks);
             this.Controls.Add(this.b_refreshSymLinks);
@@ -260,5 +285,7 @@
         private System.Windows.Forms.DataGridView dgv_SymLinks;
         private System.Windows.Forms.FolderBrowserDialog fbd_SymLinks;
         private System.Windows.Forms.Label lbl_SymbolicLinks;
+        private System.Windows.Forms.CheckBox cb_ShowInstructions;
+        private System.Windows.Forms.Label lblShowInstructions;
     }
 }
