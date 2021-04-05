@@ -1,6 +1,9 @@
 # OneDriveBully
 Have a lot of folders you want to sync to OneDrive but not enough space in your main hard drive? 
 
+![17435910_309645286121446_697675670786975216_o](https://user-images.githubusercontent.com/20832437/113570489-597bed80-960c-11eb-89a2-ea4dd17fde82.png)
+
+
 I did, I had all my photos on the D:\ drive but OneDrive was requiring to copy them to the OneDrive folder in C:\ . But my C:\ is not big enough.
 
 OneDrive Bully was developed to solve exactly that.
