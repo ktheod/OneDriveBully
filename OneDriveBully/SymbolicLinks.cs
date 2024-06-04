@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using Microsoft.Win32.SafeHandles;
+using System;
 using System.Runtime.InteropServices;
-using Microsoft.Win32.SafeHandles;
-using System.IO;
+using System.Text;
 
 namespace OneDriveBully
 {
     internal class SymbolicLinks
     {
 
+        //Release 1.4 - New Class to handle symbolic links
+        
         // Create symbolic link ******************************************************************************************************
         
         // Import CreateSymbolicLink function from kernel32.dll

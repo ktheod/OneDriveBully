@@ -1,22 +1,20 @@
-﻿using System;
-using System.Windows.Forms;
-using System.IO;
-using System.Timers;
-using Microsoft.Win32;
-using System.Runtime.InteropServices;
-using System.Security.Principal;
-using System.Data;
+﻿using Microsoft.Win32;
 using OneDriveBully.Properties;
-using System.Threading;
-using System.Management;
-using System.Linq;
+using System;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
+using System.Linq;
+using System.Security.Principal;
+using System.Threading;
+using System.Timers;
+using System.Windows.Forms;
 
 namespace OneDriveBully
 {
     //Version 1.3 - Changed temp file handling from create/delete to create/rename to keep clean OneDrive log and Recycle Bin
     //            - Changed  [DllImport("Kernel32.dll", CharSet = CharSet.Unicode)] to [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-    //
+    //Version 1.4 - Replaced SymbolicLink class with SymbolicLinks class - new Implementation
 
     public class MyFunctions
     {

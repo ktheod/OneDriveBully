@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Windows.Forms;
-using OneDriveBully.Properties;
-using System.Drawing;
 
 namespace OneDriveBully
 {
-	class ContextMenus
+    class ContextMenus
 	{
 		bool isAboutLoaded = false;
         bool isSettingsFormLoaded = false;
