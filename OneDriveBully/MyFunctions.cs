@@ -8,6 +8,9 @@ using System.Security.Principal;
 using System.Data;
 using OneDriveBully.Properties;
 using System.Threading;
+using System.Management;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace OneDriveBully
 {
@@ -242,61 +245,49 @@ namespace OneDriveBully
         #endregion Windows Registry Related Functions 
 
         #region Symbolic Links Related Functions
-
-        //Version 1.3 -
-        //[DllImport("Kernel32.dll", CharSet = CharSet.Unicode)]
-        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        //Version 1.3 +
-        static extern bool CreateSymbolicLink(
-            string lpSymlinkFileName,
-            string lpTargetFileName,
-            uint dwFlags
-        );
-
-        const uint SYMBLOC_LINK_FLAG_FILE = 0x0;
-        const uint SYMBLOC_LINK_FLAG_DIRECTORY = 0x1;
-
-        public bool createSymbolicLink(string DestDir, string TargetDir)
+        //Version 1.4 - Replaced CreateSymbolicLink and deleteSymbolicLink - 
+        public bool CreateSymbolicLink(string linkPath, string targetPath)
         {
             if (!IsElevated)
             {
-                MessageBox.Show("You need to run the application as Administrator.",
-                                    "Error creating Link", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Please run the application as Administrator to create symbolic links.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
 
-            if (!Directory.Exists(DestDir))
+            try
             {
-                if (!CreateSymbolicLink(DestDir, TargetDir, SYMBLOC_LINK_FLAG_DIRECTORY))
-                {
-                    MessageBox.Show("Unable to create symbolic link. " +
-                                    "\n" + "(Error Code: " + Marshal.GetLastWin32Error() + ")",
-                                    "Error creating Link", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return false;
-                }
-                return true;
+                SymbolicLinks.CreateSymlink(@linkPath, @targetPath, true);
             }
-            else
+            catch(Exception ex)
             {
-                MessageBox.Show("Unable to create symbolic link." +
-                "\n" + "Folder already exists.","Error creating Link",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                MessageBox.Show("Error creating symbolic link: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
+            return true;
         }
 
-        public bool deleteSymbolicLink(string DirToDelete)
+        public bool deleteSymbolicLink(string linkPath, bool showErrors = true)
         {
-            if (Directory.Exists(DirToDelete))
+            if(!IsElevated)
             {
-                Directory.Delete(DirToDelete);
-                return true;
+                MessageBox.Show("Please run the application as Administrator to delete symbolic links.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
             }
 
-            MessageBox.Show("Error: Unable to delete symbolic link." +
-            "\n" + "Folder doesn't exist.", "Error deleting Link", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            return false;
+            try
+            {
+                SymbolicLinks.DeleteSymlink(@linkPath,true);
+            }
+            catch (Exception ex)
+            {
+                if (showErrors)
+                {
+                    MessageBox.Show("Error deleting symbolic link: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                return false;
+            }
+            return true;
         }
-
         static bool IsElevated
         {
             get
@@ -306,7 +297,9 @@ namespace OneDriveBully
             }
         }
 
-        public DataTable getOneDriveForSymLinks()
+        //Version 1.4 - Replaced CreateSymbolicLink and deleteSymbolicLink  +
+
+        public DataTable getOneDriveSymLinks()
         {
             DataTable SymLinksTable = new DataTable();
             SymLinksTable.Columns.Add("Folder Path", typeof(string));
@@ -314,32 +307,76 @@ namespace OneDriveBully
             SymLinksTable.Columns.Add("Folder Name", typeof(string));
 
             Properties.Settings.Default.Reload();
-            string[] subDirs = Directory.GetDirectories(Properties.Settings.Default.OneDriveRootFolder, "*", SearchOption.AllDirectories);
 
-            SymbolicLink sl = new SymbolicLink();
-
-            foreach (string subDir in subDirs)
+            List<string> dirs = new List<string>();
+            try
             {
-                if (IsSymbolic(@subDir))
+                dirs = GetDirectories(Properties.Settings.Default.OneDriveRootFolder);
+            }
+            catch (Exception ex)
+            {
+                //MessageBox.Show("Error getting OneDrive folders: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return SymLinksTable;
+            }
+
+            foreach (string subDir in dirs)
+            {
+                if (subDir.Length < 260)
                 {
-                    string targetF = sl.GetSymLinkTarget(@subDir);
-                    Console.WriteLine(subDir.ToString() + " - " + IsSymbolic(@subDir)
-                                      + " ==> " + @targetF);
-                    SymLinksTable.Rows.Add(@targetF, @subDir, getFolderName(subDir));
+                    if (SymbolicLinks.IsDirectorySymbolicLink(subDir))
+                    {
+                        //string targetF = sl.GetSymLinkTarget(@subDir);
+                        try
+                        {
+                            string targetF = SymbolicLinks.GetSymbolicLinkTarget(@subDir);
+                            Console.WriteLine(subDir.ToString() + " - " + true.ToString()
+                                              + " ==> " + @targetF);
+                            SymLinksTable.Rows.Add(@targetF, @subDir, getFolderName(subDir));
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(subDir.ToString() + " - " + false.ToString()
+                                                                             + " ==> " + ex.Message);
+                        }
+                    }
                 }
             }
             return SymLinksTable;
-        }
-
-        private bool IsSymbolic(string path)
-        {
-            FileInfo pathInfo = new FileInfo(path);
-            return pathInfo.Attributes.HasFlag(FileAttributes.ReparsePoint);
         }
         private string getFolderName(string path)
         {
             string OneDrivePath = Properties.Settings.Default.OneDriveRootFolder;    
             return path.Remove(0, OneDrivePath.Length + 1);
+        }
+
+        public static List<string> GetDirectories(string path, string searchPattern = "*",
+        SearchOption searchOption = SearchOption.AllDirectories)
+        {
+            if (searchOption == SearchOption.TopDirectoryOnly)
+                return Directory.GetDirectories(path, searchPattern).ToList();
+
+            var directories = new List<string>(GetDirectories(path, searchPattern));
+
+            for (var i = 0; i < directories.Count; i++)
+                directories.AddRange(GetDirectories(directories[i], searchPattern));
+
+            return directories;
+        }
+
+        private static List<string> GetDirectories(string path, string searchPattern)
+        {
+            try
+            {
+                return Directory.GetDirectories(path, searchPattern).ToList();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return new List<string>();
+            }
+            catch(Exception ex)
+            {
+                return new List<string>();
+            }
         }
 
         #endregion Symbolic Links Related Functions

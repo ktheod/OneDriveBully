@@ -176,7 +176,7 @@
             this.linkLabelFacebook.Location = new System.Drawing.Point(143, 74);
             this.linkLabelFacebook.Margin = new System.Windows.Forms.Padding(6, 0, 3, 0);
             this.linkLabelFacebook.Name = "linkLabelFacebook";
-            this.linkLabelFacebook.Size = new System.Drawing.Size(85, 13);
+            this.linkLabelFacebook.Size = new System.Drawing.Size(101, 19);
             this.linkLabelFacebook.TabIndex = 27;
             this.linkLabelFacebook.TabStop = true;
             this.linkLabelFacebook.Text = "Facebook Page";
@@ -185,7 +185,7 @@
             // AboutBox
             // 
             this.AcceptButton = this.okButton;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.ClientSize = new System.Drawing.Size(435, 287);

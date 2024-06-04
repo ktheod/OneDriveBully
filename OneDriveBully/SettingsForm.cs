@@ -188,21 +188,6 @@ namespace OneDriveBully
                 if (fbd_SymLinks.SelectedPath != null || fbd_SymLinks.SelectedPath != "")
                 {
                     //Version 1.3 -
-                    /*
-                    string fAdd = fbd_SymLinks.SelectedPath + @"\";
-                    string fAddName = System.IO.Path.GetDirectoryName(fAdd);
-                    System.IO.DirectoryInfo info = new System.IO.DirectoryInfo(fAddName);
-                    fAddName = info.Name;
-
-                    if (fAdd != "" && fAddName != "")
-                    {
-                        //if (ProcessIcon.fn.createSymbolicLink(@Properties.Settings.Default.OneDriveRootFolder + @"\" + @fAddName, @fAdd))
-                        //{
-                        //    Refresh_dgv();
-                        //}
-                    }
-                    */
-
                     string fAdd = fbd_SymLinks.SelectedPath + @"\";
                     string fAddName;
                     System.IO.DirectoryInfo info = new System.IO.DirectoryInfo(fAdd);
@@ -233,10 +218,14 @@ namespace OneDriveBully
                                     {
                                         System.IO.Directory.CreateDirectory(OneDriveFolderStructure);
                                     }
-                                    ProcessIcon.fn.createSymbolicLink(@OneDriveFolder, @fAdd);
+                                    //Version 1.4 - New Functionality -
+                                    ProcessIcon.fn.CreateSymbolicLink(@OneDriveFolder, @fAdd);
+                                    //Version 1.4 - New Functionality +
                                     break;
                                 case DialogResult.No:
-                                    ProcessIcon.fn.createSymbolicLink(@Properties.Settings.Default.OneDriveRootFolder + @"\" + @fAddName, @fAdd);
+                                    //Version 1.4 - New Functionality -
+                                    ProcessIcon.fn.CreateSymbolicLink(@Properties.Settings.Default.OneDriveRootFolder + @"\" + @fAddName, @fAdd);
+                                    //Version 1.4 - New Functionality +
                                     break;
                                 case DialogResult.Cancel:
                                     break;
@@ -273,7 +262,9 @@ namespace OneDriveBully
                     //{
                     //    Refresh_dgv();
                     //}
+                    //Version 1.4 - New Functionality -
                     ProcessIcon.fn.deleteSymbolicLink(@fDel);
+                    //Version 1.4 - New Functionality +
                     //Version 1.3 +
                 }
             }
@@ -290,7 +281,7 @@ namespace OneDriveBully
         private void Refresh_dgv()
         {
             SymLinksTable = new DataTable();
-            SymLinksTable = ProcessIcon.fn.getOneDriveForSymLinks();
+            SymLinksTable = ProcessIcon.fn.getOneDriveSymLinks();
             //Version 1.3 -
             //if (SymLinksTable.Rows.Count > 0)
             //{
