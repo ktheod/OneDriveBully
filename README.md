@@ -3,6 +3,7 @@ Have a lot of folders you want to sync to OneDrive but not enough space in your 
 
 ![17435910_309645286121446_697675670786975216_o](https://user-images.githubusercontent.com/20832437/113570489-597bed80-960c-11eb-89a2-ea4dd17fde82.png)
 
+![2024-06-04 18_52_22-OneDrive Bully - Settings](https://github.com/ktheod/OneDriveBully/assets/20832437/9a59a881-5d9b-45bf-8fb2-a5881b8c94b5)
 
 I did, I had all my photos on the D:\ drive but OneDrive was requiring to copy them to the OneDrive folder in C:\ . But my C:\ is not big enough.
 
